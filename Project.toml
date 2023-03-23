@@ -3,6 +3,9 @@ uuid = "e2cc112f-28d1-4ed4-acfa-be605a9d07f6"
 authors = ["Northwemko <yinyangxiangsheng@gmail.com> and contributors"]
 version = "1.0.0-DEV"
 
+[deps]
+SpecialFunctions = "276daf66-3868-5448-9aa4-cd146d93841b"
+
 [compat]
 julia = "1"
 
