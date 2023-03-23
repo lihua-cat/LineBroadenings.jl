@@ -12,6 +12,26 @@ using Test
     pl = pdf.(fl, x)
     pg = pdf.(fg, x)
     pv = pdf.(fv, x)
+    @testset "constructor" begin
+        @test_throws DomainError Lorentz(μ, -γ)
+        @test_throws DomainError Gaussian(μ, -σ)
+        @test_throws DomainError Voigt(μ, -σ, γ)
+        @test_throws DomainError Voigt(μ, σ, -γ)
+        @test_throws DomainError Voigt(μ, -σ, -γ)
+        @test Voigt(μ, 0, γ) == Lorentz(μ, γ)
+        @test Voigt(μ, σ, 0) == Gaussian(μ, σ)
+        @test Lorentz(1, 1.0) == Lorentz(1, 1) == Lorentz(1.0, 1.0)
+        @test Gaussian(1.0, 1) == Gaussian(1, 1) == Gaussian(1.0, 1.0)
+        @test Voigt(0.0, 1.0, 1) == Voigt(0, 1, 1) == Voigt(0.0, 1.0, 1.0)
+    end
+    @testset "zero width" begin
+        @test isinf(pdf(Lorentz(μ, 0), μ))
+        @test isinf(pdf(Gaussian(μ, 0), μ))
+        @test isinf(pdf(Voigt(μ, 0, 0), μ))
+        @test iszero(pdf(Lorentz(μ, 0), μ + rand()))
+        @test iszero(pdf(Gaussian(μ, 0), μ + rand()))
+        @test iszero(pdf(Voigt(μ, 0, 0), μ + rand()))
+    end
     @testset "peak" begin
         @test peak(fl) == 1 / π / γ && isapprox(maximum(pl), peak(fl), rtol = 1e-3)
         @test peak(fg) == 1 / σ / √(2π) && isapprox(maximum(pg), peak(fg), rtol = 1e-3)
@@ -43,8 +63,11 @@ using Test
         pv2 = view(pv, x .>= μ)
         fwhm_v = x2[(findmin(abs.(pv2 .- peak(fv) / 2)))[2]] -
                  x1[(findmin(abs.(pv1 .- peak(fv) / 2)))[2]]
+
         @test isapprox(fwhm_l, fwhm(fl), rtol = 1e-2)
         @test isapprox(fwhm_g, fwhm(fg), rtol = 1e-2)
-        @test fwhm_v > fwhm(fl) && fwhm_v > fwhm(fg)
+        @test isapprox(fwhm_v, LineBroadenings.fwhm_approx(fv), rtol = 1e-2) &&
+              fwhm_v > fwhm(fl) &&
+              fwhm_v > fwhm(fg)
     end
 end

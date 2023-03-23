@@ -37,12 +37,14 @@ struct Voigt{T <: Real} <: Profile
     σ::T
     γ::T
     function Voigt{T}(µ::T, σ::T, γ::T) where {T <: Real}
-        if σ >= zero(σ) && γ >= zero(γ)
+        if iszero(σ)
+            Lorentz(μ, γ)
+        elseif iszero(γ)
+            Gaussian(μ, σ)
+        elseif σ > zero(σ) && γ > zero(γ)
             new{T}(µ, σ, γ)
-        elseif σ < zero(σ)
-            throw(DomainError(σ, "σ=$σ must be nonnegative"))
         else
-            throw(DomainError(γ, "γ=$γ must be nonnegative"))
+            throw(DomainError((σ, γ), "σ and γ must be nonnegative"))
         end
     end
 end
@@ -60,18 +62,8 @@ w(z) = erfcx(-im * z) # Faddeeva function
 
 function pdf(d::Voigt, x::Real)
     μ, σ, γ = params(d)
-    if iszero(σ) && iszero(γ)
-        p = x == μ ? Inf : zero(x)
-    elseif iszero(σ)
-        dl = Lorentz(μ, γ)
-        p = pdf(dl, x)
-    elseif iszero(γ)
-        dg = Gaussian(μ, σ)
-        p = pdf(dg, x)
-    else
-        z = (x - μ + im * γ) / (√(2) * σ)
-        p = real(w(z)) / (SQRT2π * σ)
-    end
+    z = (x - μ + im * γ) / (√(2) * σ)
+    p = real(w(z)) / (SQRT2π * σ)
     return p
 end
 
