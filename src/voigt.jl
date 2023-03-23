@@ -23,7 +23,7 @@ z=\frac{x-\mu+i \gamma}{\sigma \sqrt{2}}
 ```
 
 # Fields
-- `μ::Real`: center
+- `μ::Real`: location parameter
 - `σ::Real`: σ in Gaussian distribution
 - `γ::Real`: γ in Lorentz distribution
 

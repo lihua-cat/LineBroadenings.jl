@@ -6,8 +6,8 @@ Gaussian distribution, also called normal distribution.
 
 # Definition
 ```math
-f\left(x ; \mu, \sigma\right)=\frac{1}{\sigma \sqrt{2 \pi}} e^{-\frac{1}{2}
-\left(\frac{x-\mu}{\sigma}\right)^{2}}
+f\left(x ; \mu, \sigma\right)=\frac{1}{\sigma \sqrt{2 \pi}} \exp{\left[-\frac{1}{2}
+\left(\frac{x-\mu}{\sigma}\right)^{2}\right]}
 ```
 
 # Fields
