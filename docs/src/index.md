@@ -8,7 +8,3 @@ Documentation for [LineBroadenings](https://github.com/lihua-cat/LineBroadenings
 
 ```@index
 ```
-
-```@autodocs
-Modules = [LineBroadenings]
-```
