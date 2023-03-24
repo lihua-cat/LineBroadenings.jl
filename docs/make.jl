@@ -17,6 +17,7 @@ makedocs(;
          pages = [
              "Home" => "index.md",
              "line profile functions" => "profiles.md",
+             "spectral line broadenings" => "spectra.md",
          ])
 
 deploydocs(;
