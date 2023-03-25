@@ -1,3 +1,5 @@
+## profiles
+
 """
     profile_pressure(ν; ν0, νp)
 
@@ -53,6 +55,8 @@ function profile_voigt(ν; ν0, νd, νp)
     pdf(d_v, ν) / u
 end
 
+## FWHM
+
 @doc raw"""
     fwhm_pressure(P, γ)
 
@@ -87,5 +91,4 @@ function fwhm_doppler(ν0, M::Mass, T::AbsoluteScaleTemperature)
     uconvert(unit(ν0), √(8𝑘 * T * log(2) / M / 𝑐^2) * ν0)
 end
 
-"approx fwhm of Voigt profile"
 fwhm_voigt_approx(νd, νc) = uconvert(unit(νd), 0.5346νc + √(0.2166νc^2 + νd^2))
